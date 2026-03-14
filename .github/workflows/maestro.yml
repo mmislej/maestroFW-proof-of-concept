@@ -53,6 +53,7 @@ jobs:
         if: always()
         run: |
           export PATH="$PATH":"$HOME/.maestro/bin"
+          mkdir -p test-results
           maestro test tests/ --format junit --output test-results/report.xml || true
 
       - name: Upload JUnit results
