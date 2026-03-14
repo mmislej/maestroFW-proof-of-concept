@@ -1,0 +1,4 @@
+# Action: verify cart screen is visible
+appId: dev.flutter.providerShopper
+---
+- assertVisible: "Cart"

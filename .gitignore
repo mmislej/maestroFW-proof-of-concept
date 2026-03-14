@@ -1,0 +1,36 @@
+# App under test (clone from https://github.com/flutter/samples)
+samples/
+
+# Flutter
+samples/provider_shopper/.dart_tool/
+samples/provider_shopper/.flutter-plugins
+samples/provider_shopper/.flutter-plugins-dependencies
+samples/provider_shopper/build/
+samples/provider_shopper/pubspec.lock
+
+# iOS / Xcode
+samples/provider_shopper/ios/Pods/
+samples/provider_shopper/ios/.symlinks/
+samples/provider_shopper/ios/Flutter/Flutter.framework
+samples/provider_shopper/ios/Flutter/Flutter.podspec
+samples/provider_shopper/ios/Runner.xcworkspace/xcuserdata/
+*.xcuserstate
+*.xcbkptlist
+
+# Android
+samples/provider_shopper/android/.gradle/
+samples/provider_shopper/android/local.properties
+samples/provider_shopper/android/app/debug/
+samples/provider_shopper/android/app/release/
+samples/provider_shopper/android/app/profile/
+
+# Maestro
+.maestro/tests/
+
+# Local setup guides
+FLUTTER_SETUP.md
+MAESTRO_SETUP.md
+
+# macOS
+.DS_Store
+**/.DS_Store

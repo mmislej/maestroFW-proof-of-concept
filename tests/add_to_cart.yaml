@@ -1,0 +1,18 @@
+appId: dev.flutter.providerShopper
+---
+- launchApp
+- runFlow:
+    file: ../actions/do_login.yaml
+    env:
+      USERNAME: "user"
+      PASSWORD: "pass"
+- runFlow:
+    file: ../actions/add_items_and_go_to_cart.yaml
+    env:
+      ADD_ITEMS_COUNT: 1
+- runFlow: ../actions/assert_cart_visible.yaml
+- assertVisible: "Code Smell"
+- assertVisible: "$42"
+- tapOn: "BUY"
+- assertVisible: "Buying not supported yet."
+- stopApp

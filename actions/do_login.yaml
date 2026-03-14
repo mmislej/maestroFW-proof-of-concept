@@ -1,0 +1,11 @@
+# Action: login with username and password
+appId: dev.flutter.providerShopper
+---
+- assertVisible: "Welcome"
+- tapOn:
+    text: "Username"
+- inputText: ${USERNAME}
+- tapOn:
+    text: "Password"
+- inputText: ${PASSWORD}
+- tapOn: "ENTER"

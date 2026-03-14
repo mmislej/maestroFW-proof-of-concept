@@ -1,0 +1,54 @@
+name: Maestro Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test-ios:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+
+      - name: Install dependencies
+        working-directory: samples/provider_shopper
+        run: flutter pub get
+
+      - name: Start iOS Simulator
+        run: |
+          xcrun simctl boot "iPhone 16 Pro" || true
+          open -a Simulator
+
+      - name: Build & install app on simulator
+        working-directory: samples/provider_shopper
+        run: flutter build ios --simulator --no-codesign
+
+      - name: Install app on simulator
+        working-directory: samples/provider_shopper
+        run: |
+          DEVICE_ID=$(xcrun simctl list devices booted | grep -oE '[A-F0-9-]{36}' | head -1)
+          xcrun simctl install $DEVICE_ID build/ios/iphonesimulator/Runner.app
+
+      - name: Install Maestro
+        run: curl -fsSL "https://get.maestro.mobile.dev" | bash
+
+      - name: Run Maestro tests
+        run: |
+          export PATH="$PATH":"$HOME/.maestro/bin"
+          maestro test tests/add_to_cart.yaml
+
+      - name: Upload test artifacts on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: maestro-debug
+          path: ~/.maestro/tests/

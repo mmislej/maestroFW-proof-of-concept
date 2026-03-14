@@ -1,0 +1,10 @@
+# Action: verify catalog is visible, add items, navigate to cart
+appId: dev.flutter.providerShopper
+---
+- assertVisible: "Catalog"
+- repeat:
+    times: ${ADD_ITEMS_COUNT}
+    commands:
+      - tapOn: "ADD"
+- tapOn:
+    point: "94%,10%"
