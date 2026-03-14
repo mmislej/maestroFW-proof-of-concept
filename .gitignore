@@ -31,6 +31,9 @@ samples/provider_shopper/android/app/profile/
 FLUTTER_SETUP.md
 MAESTRO_SETUP.md
 
+# Claude
+.claude/
+
 # macOS
 .DS_Store
 **/.DS_Store
