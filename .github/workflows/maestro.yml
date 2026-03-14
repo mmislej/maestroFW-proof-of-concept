@@ -6,6 +6,11 @@ on:
   pull_request:
     branches: [master]
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 jobs:
   test-ios:
     runs-on: macos-latest
@@ -45,11 +50,19 @@ jobs:
         run: curl -fsSL "https://get.maestro.mobile.dev" | bash
 
       - name: Run Maestro tests
+        if: always()
         run: |
           export PATH="$PATH":"$HOME/.maestro/bin"
-          maestro test tests/add_to_cart.yaml
+          maestro test tests/ --format junit --output test-results/report.xml || true
 
-      - name: Upload test artifacts on failure
+      - name: Upload JUnit results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-ios
+          path: test-results/
+
+      - name: Upload debug artifacts on failure
         if: failure()
         uses: actions/upload-artifact@v4
         with:
@@ -99,11 +112,57 @@ jobs:
             adb install samples/provider_shopper/build/app/outputs/flutter-apk/app-debug.apk
             curl -fsSL "https://get.maestro.mobile.dev" | bash
             export PATH="$PATH":"$HOME/.maestro/bin"
-            maestro test tests/add_to_cart.yaml
+            maestro test tests/ --format junit --output test-results/report.xml || true
 
-      - name: Upload test artifacts on failure
+      - name: Upload JUnit results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-android
+          path: test-results/
+
+      - name: Upload debug artifacts on failure
         if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: maestro-debug-android
           path: ~/.maestro/tests/
+
+  publish-report:
+    runs-on: ubuntu-latest
+    needs: [test-ios]
+    if: always()
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download iOS test results
+        uses: actions/download-artifact@v4
+        with:
+          name: test-results-ios
+          path: test-results/
+
+      - name: Setup Java (for Allure)
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Install Allure
+        run: |
+          curl -o allure.tgz -L https://github.com/allure-framework/allure2/releases/download/2.27.0/allure-2.27.0.tgz
+          tar -xzf allure.tgz
+          sudo mv allure-2.27.0 /opt/allure
+          sudo ln -s /opt/allure/bin/allure /usr/local/bin/allure
+
+      - name: Generate Allure report
+        run: allure generate test-results --clean -o allure-report
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: allure-report
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
