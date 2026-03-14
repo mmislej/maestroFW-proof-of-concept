@@ -1,9 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Bash(mv /Users/martinmislej/Documents/projects/maestroFW-proof-of-concept/tests/actions/login.yaml /Users/martinmislej/Documents/projects/maestroFW-proof-of-concept/tests/actions/do_login.yaml)",
-      "Bash(mv /Users/martinmislej/Documents/projects/maestroFW-proof-of-concept/tests/actions/catalog.yaml /Users/martinmislej/Documents/projects/maestroFW-proof-of-concept/tests/actions/add_items_and_go_to_cart.yaml)",
-      "Bash(mv /Users/martinmislej/Documents/projects/maestroFW-proof-of-concept/tests/actions/cart.yaml /Users/martinmislej/Documents/projects/maestroFW-proof-of-concept/tests/actions/assert_cart_visible.yaml)"
-    ]
-  }
-}
