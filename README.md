@@ -1,5 +1,7 @@
 # Maestro UI Testing — Proof of Concept
 
+![Maestro Tests](https://github.com/mmislej/maestroFW-proof-of-concept/actions/workflows/maestro.yml/badge.svg)
+
 A mobile UI test automation proof of concept using [Maestro](https://maestro.mobile.dev), demonstrating how to build a scalable test framework **without access to the app's source code**.
 
 The app under test is [provider_shopper](https://github.com/flutter/samples/tree/main/provider_shopper), a Flutter sample app featuring a login screen, product catalog, and shopping cart.
