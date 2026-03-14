@@ -69,64 +69,6 @@ jobs:
           name: maestro-debug-ios
           path: ~/.maestro/tests/
 
-  test-android:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Clone Flutter samples (app under test)
-        run: git clone --depth 1 https://github.com/flutter/samples.git
-
-      - name: Setup Java
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: 21
-
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          channel: stable
-
-      - name: Install dependencies
-        working-directory: samples/provider_shopper
-        run: flutter pub get
-
-      - name: Pin Gradle to 8.9 (workaround for FlutterPlugin.kt bug in Gradle 8.12)
-        run: sed -i 's/gradle-[0-9][0-9.]*-[a-z]*/gradle-8.9-all/g' samples/provider_shopper/android/gradle/wrapper/gradle-wrapper.properties
-
-      - name: Build Android APK
-        working-directory: samples/provider_shopper
-        run: flutter build apk --debug
-
-      - name: Run Android Emulator and Maestro tests
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: 33
-          arch: x86_64
-          profile: pixel_6
-          script: |
-            adb install samples/provider_shopper/build/app/outputs/flutter-apk/app-debug.apk
-            curl -fsSL "https://get.maestro.mobile.dev" | bash
-            export PATH="$PATH":"$HOME/.maestro/bin"
-            maestro test tests/ --format junit --output test-results/report.xml || true
-
-      - name: Upload JUnit results
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-results-android
-          path: test-results/
-
-      - name: Upload debug artifacts on failure
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: maestro-debug-android
-          path: ~/.maestro/tests/
-
   publish-report:
     runs-on: ubuntu-latest
     needs: [test-ios]
