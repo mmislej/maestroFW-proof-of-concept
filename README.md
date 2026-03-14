@@ -1,6 +1,7 @@
 # Maestro UI Testing — Proof of Concept
 
 ![Maestro Tests](https://github.com/mmislej/maestroFW-proof-of-concept/actions/workflows/maestro.yml/badge.svg)
+[![Test Report](https://img.shields.io/badge/Test%20Report-Allure-blue)](https://mmislej.github.io/maestroFW-proof-of-concept)
 
 A mobile UI test automation proof of concept using [Maestro](https://maestro.mobile.dev), demonstrating how to build a scalable test framework **without access to the app's source code**.
 
@@ -113,17 +114,22 @@ maestro studio
 
 ---
 
-## CI Pipeline
+## CI Pipeline & Test Report
 
-The `.github/workflows/maestro.yml` workflow runs on every push and pull request to `main`.
+The `.github/workflows/maestro.yml` workflow runs on every push and pull request to `master`.
 
 **Pipeline steps:**
 1. Install Flutter and app dependencies
-2. Boot iPhone Simulator
-3. Build and install the app on the simulator
+2. Boot iPhone Simulator / Android Emulator
+3. Build and install the app
 4. Install Maestro
-5. Run all test suites
-6. Upload debug artifacts (screenshots + logs) on failure
+5. Run all test suites and generate JUnit XML report
+6. Generate Allure HTML report and publish to GitHub Pages
+7. Upload debug artifacts (screenshots + logs) on failure
+
+**Live test report:** [mmislej.github.io/maestroFW-proof-of-concept](https://mmislej.github.io/maestroFW-proof-of-concept)
+
+[**📊 View Test Report →**](https://mmislej.github.io/maestroFW-proof-of-concept)
 
 ---
 
