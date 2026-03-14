@@ -95,8 +95,7 @@ jobs:
         run: flutter pub get
 
       - name: Pin Gradle to 8.9 (workaround for FlutterPlugin.kt bug in Gradle 8.12)
-        working-directory: samples/provider_shopper/android
-        run: ./gradlew wrapper --gradle-version 8.9
+        run: sed -i 's/gradle-[0-9.]*-bin/gradle-8.9-bin/' samples/provider_shopper/android/gradle/wrapper/gradle-wrapper.properties
 
       - name: Build Android APK
         working-directory: samples/provider_shopper
