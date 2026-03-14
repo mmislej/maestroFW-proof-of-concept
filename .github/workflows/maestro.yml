@@ -50,5 +50,50 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: maestro-debug
+          name: maestro-debug-ios
+          path: ~/.maestro/tests/
+
+  test-android:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+
+      - name: Install dependencies
+        working-directory: samples/provider_shopper
+        run: flutter pub get
+
+      - name: Build Android APK
+        working-directory: samples/provider_shopper
+        run: flutter build apk --debug
+
+      - name: Run Android Emulator and Maestro tests
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 33
+          arch: x86_64
+          profile: pixel_6
+          script: |
+            adb install samples/provider_shopper/build/app/outputs/flutter-apk/app-debug.apk
+            curl -fsSL "https://get.maestro.mobile.dev" | bash
+            export PATH="$PATH":"$HOME/.maestro/bin"
+            maestro test tests/add_to_cart.yaml
+
+      - name: Upload test artifacts on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: maestro-debug-android
           path: ~/.maestro/tests/
